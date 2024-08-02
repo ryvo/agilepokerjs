@@ -1,0 +1,6 @@
+{
+  "error": {
+    "unauthorized": "User is not authorized.",
+    "invalidUserName": "Invalid user name."
+  }
+}

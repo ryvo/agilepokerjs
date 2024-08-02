@@ -1,0 +1,6 @@
+{
+  "error": {
+    "unauthorized": "Uivatel nemá autorizaci.",
+    "invalidUserName": "Neplatné jméno uživtele."
+  }
+}
