@@ -1,15 +1,16 @@
-import { configureStore, applyMiddleware, combineReducers } from '@reduxjs/toolkit';
-import { thunk } from 'redux-thunk';
-import authReducer from './authReducer';
-import authMiddleware from './authMiddleware';
+import { configureStore, getDefaultMiddleware, combineReducers } from '@reduxjs/toolkit';
+import authReducer from './reducers/authReducer';
+import authMiddleware from './middleware/authMiddleware';
+import roomReducer from './reducers/roomReducer';
 
 const rootReducer = combineReducers({
   user: authReducer,
+  room: roomReducer,
 });
 
 const store = configureStore({
   reducer: rootReducer,
-  middleware: [thunk, authMiddleware],
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat([authMiddleware]),
 });
 
 export default store;

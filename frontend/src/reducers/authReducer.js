@@ -1,4 +1,4 @@
-import AuthActionType from './authActionTypes';
+import AuthActionType from '../actions/authActionTypes';
 import axios from 'axios';
 
 const initialState = {
@@ -8,7 +8,10 @@ const initialState = {
 const authReducer = (state = initialState, action) => {
   switch (action.type) {
     case AuthActionType.getUser:
-      axios.get('/api/')
+      return {
+        ...state,
+        user: action.payload,
+      }
     case 'LOGIN':
       return {
         ...state,

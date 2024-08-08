@@ -1,7 +1,10 @@
-import logo from './logo.svg';
+import RoomList from './RoomList';
 
 export default function Dashboard() {
   return (
-      <h1>Dashboard</h1>
+      <div>
+        <h1>Dashboard</h1>
+        <RoomList />
+      </div>
   );
 }

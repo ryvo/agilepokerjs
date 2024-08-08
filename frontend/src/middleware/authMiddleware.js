@@ -1,10 +1,12 @@
-import { logout } from './authActions';
+import { logout } from '../actions/authActions';
 
 const authMiddleware = ({ dispatch }) => next => action => {
-  if (action.error && action.error.response && action.error.response.status == 401) {
+/*  if (action.error && action.error.response && action.error.response.status == 401) {
     dispatch(logout());
-    window.location.href = '/register';
-  }
+    if (window.location.href !== '/register') {
+      window.location.href = '/register';
+    }
+  }*/
   return next(action);
 };
 

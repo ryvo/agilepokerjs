@@ -98,3 +98,23 @@ app.listen(port, (error) => {
   }
   console.log(`Server started and listening on port ${port}.`);
 })
+
+app.get('/api/rooms', (req, res) => {
+  const userId = req.cookies[COOKIE_USER_ID];
+  if (!userId) {
+    res.status(401).send(authorizationError());
+    return
+  }
+  return [
+    {
+      id: '1',
+      name: 'Room 1',
+      creationTime: '2024-08-07T09:50:41.000'
+    },
+    {
+      id: '2',
+      name: 'Room 2',
+      creationTime: '2024-08-07T09:50:42.000'
+    }
+  ]
+})
