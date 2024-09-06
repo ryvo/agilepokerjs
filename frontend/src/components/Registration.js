@@ -1,7 +1,32 @@
+import './Registration.css';
+import Button from 'react-bootstrap/Button';
+import Container from 'react-bootstrap/Container';
+import Form from 'react-bootstrap/Form';
+import { registerUser } from '../slices/userSlice';
+import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+
 export default function Registration() {
+  const [username, setUsername] = useState();
+  const dispatch = useDispatch();
+
+  const onSubmitHandler = (e) => {
+    e.preventDefault();
+    dispatch(registerUser(username));
+  };
+
   return (
-      <h1>Registration</h1>
-      <label for='username'>What's your name, Sir?</label>
-      <input type='text' id='username'>
+    <Container id="registration-form" className="w-50 text-center">
+      <Form className="align-items-center">
+        <Form.Group className="mb-4">
+          <h1>Registration</h1>
+        </Form.Group>
+        <Form.Group className="mb-4">
+          <Form.Label>What's your name?</Form.Label>
+          <Form.Control onChange={(e) => setUsername(e.target.value)}/>
+        </Form.Group>
+        <Button type="submit" onClick={(e) => onSubmitHandler(e)}>Register</Button>
+      </Form>
+    </Container>
   );
 }

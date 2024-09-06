@@ -1,13 +1,13 @@
-import { fetchRooms } from '../slices/roomSlice';
+import { fetchRoomList } from '../slices/roomSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 
 export default function RoomList() {
   const dispatch = useDispatch();
-  const rooms = useSelector((state) => state.room.rooms)
+  const rooms = useSelector((state) => state.room?.rooms)
 
   useEffect(() => {
-    dispatch(fetchRooms());
+    dispatch(fetchRoomList());
   }, [dispatch]);
 
   return (

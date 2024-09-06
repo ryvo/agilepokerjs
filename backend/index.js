@@ -74,6 +74,7 @@ app.post("/api/users",
   }
 
   res.cookie(COOKIE_USER_ID, user.id, createUserIdCookieOptions()).send(convertUserToDTO(user));
+  return user;
 })
 
 /**

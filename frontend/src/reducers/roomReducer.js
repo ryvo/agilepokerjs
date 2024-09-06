@@ -9,7 +9,7 @@ const roomReducer = (state = initialState, action) => {
   switch (action.type) {
     case RoomActionType.getRoomList:
       backendAxios
-          .get('/rooms')
+          .get('/api/rooms')
           .then((response) => {
 
           });

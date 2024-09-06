@@ -1,16 +1,11 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-// import backendAxios from '../api/backendAxios';
 import backendAxios from '../api/backendAxios';
 
-export const fetchRooms = createAsyncThunk(
-    'rooms/fetchRooms',
+export const fetchRoomList = createAsyncThunk(
+    'rooms/fetchRoomList',
     async () => {
-      try {
-        const response = await backendAxios.get('/rooms');
-        return response.data;
-      } catch (e) {
-        return [];
-      }
+      const response = await backendAxios.get('/rooms');
+      return response.data;
     }
 );
 
@@ -18,14 +13,24 @@ const initialState = {
   roomList: [],
 };
 
-export const roomSlice = createSlice({
+const roomSlice = createSlice({
   name: 'room',
   initialState,
-  reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(fetchRooms.fulfilled, (state, action) => {
-      state.rooms = action.payload;
-    });
+    builder
+      .addCase(fetchRoomList.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchRoomList.fulfilled, (state, action) => {
+        state.rooms = action.payload;
+      })
+      .addCase(fetchRoomList.rejected, (state, action) => {
+        state.error = action.error.message;
+      })
+      .addCase(fetchRoomList.settled, (state, action) => {
+        state.loading = false;
+      })
   }
 });
 
