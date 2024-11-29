@@ -28,7 +28,7 @@ const roomSlice = createSlice({
       .addCase(fetchRoomList.rejected, (state, action) => {
         state.error = action.error.message;
       })
-      .addCase(fetchRoomList.settled, (state, action) => {
+      .addMatcher(fetchRoomList.settled, (state, action) => {
         state.loading = false;
       })
   }

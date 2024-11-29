@@ -1,7 +1,10 @@
+import LocalStorageService from '../service/LocalStorageService';
+
 const authMiddleware = store => next => action => {
-  if (action.error && action.error.response && action.error.response.status == 401) {
-    if (window.location.href !== '/register') {
-      window.location.href = '/register';
+  if (action.error && action.error.response && action.error.response.status === 401) {
+    LocalStorageService.unsetCurrentUser();
+    if (window.location.href !== '/registration') {
+      window.location.href = '/registration';
     }
   }
   return next(action);

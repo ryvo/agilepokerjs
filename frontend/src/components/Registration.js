@@ -5,14 +5,20 @@ import Form from 'react-bootstrap/Form';
 import { registerUser } from '../slices/userSlice';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router';
+import LocalStorageService from '../service/LocalStorageService';
 
 export default function Registration() {
   const [username, setUsername] = useState();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const onSubmitHandler = (e) => {
     e.preventDefault();
-    dispatch(registerUser(username));
+    dispatch(registerUser(username)).then((data) => {
+      LocalStorageService.setCurrentUser(data.payload);
+      navigate("/");
+    });
   };
 
   return (

@@ -1,0 +1,12 @@
+.form-create-room {
+  margin-bottom: 11px;
+}
+
+.form-create-room input,
+.form-create-room button {
+  width: 100%;
+}
+
+.column-actions > * {
+  margin-left: 11px;
+}

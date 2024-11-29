@@ -5,7 +5,19 @@ import { validationError, authorizationError } from './errors.js';
 import userService from './UserService.js';
 
 const app = express();
-const COOKIE_USER_ID = 'userId';
+const USER_ID = 'User-Id';
+const ROOM_LIST = [
+  {
+    id: 1,
+    name: 'Room 1',
+    lastUsedDateTime: '2024-08-07T09:50:41.000'
+  },
+  {
+    id: 2,
+    name: 'Room 2',
+    lastUsedDateTime: '2024-08-07T09:50:42.000'
+  }
+]
 
 const convertUserToDTO = (user) => {
   return {
@@ -14,6 +26,13 @@ const convertUserToDTO = (user) => {
   }
 }
 
+const convertRoomToDTO = (room) => {
+  return {
+    id: room.id,
+    name: room.name,
+    lastUsedDateTime: room.lastUsedDateTime
+  }
+}
 const createUserIdCookieOptions = () => {
   const expiryDate = new Date();
   expiryDate.setFullYear(expiryDate.getFullYear() + 10);
@@ -31,16 +50,16 @@ app.use(express.json());
 /**
  * Returns data of user identified by cookie 'userId'. Or '401 Unauthorized' if valid userId is not supplied.
  */
-app.get("/api/users", (req, res, next) => {
-  const userId = req.cookies[COOKIE_USER_ID];
+app.get("/api/users/current-user", (req, res, next) => {
+  const userId = req.header(USER_ID);
   if (userId) {
     const user = userService.get(userId);
     if (user) {
-      res.send(convertUserToDTO(user));
+      res.json(convertUserToDTO(user));
       return;
     }
   }
-  res.status(401).send(authorizationError());
+  res.status(401).json(authorizationError());
 })
 
 /**
@@ -55,25 +74,28 @@ app.post("/api/users",
   // Process validation result of the request
   const validation = validationResult(req);
   if (!validation.isEmpty()) {
-    res.status(400).send(validationError(validation.array()));
+    res.status(400).json(validationError(validation.array()));
     return;
   }
   const name = req.body.name;
 
   // If cookie 'userId' is present we will try to get the user
-  const userId = req.cookies[COOKIE_USER_ID];
+  // const userId = req.cookies[USER_ID];
+  // const userId = req.body[USER_ID];
+  const userId = req.header(USER_ID);
   let user = undefined;
   if (userId) {
     user = userService.get(userId);
   }
   if (user) {
-    // If the user exists update his name
+    // If the user exists update its name
     user.name = name;
   } else {
     user = userService.create(name);
   }
 
-  res.cookie(COOKIE_USER_ID, user.id, createUserIdCookieOptions()).send(convertUserToDTO(user));
+  // res.cookie(USER_ID, user.id, createUserIdCookieOptions()).send(convertUserToDTO(user));
+  res.json(convertUserToDTO(user));
   return user;
 })
 
@@ -81,15 +103,15 @@ app.post("/api/users",
  * Deletes the user and returns status OK with empty response body.
  */
 app.delete('/api/users', (req, res) => {
-  const userId = req.cookies[COOKIE_USER_ID];
+  const userId = req.header(USER_ID);
   if (!userId) {
-    res.status(401).send(authorizationError());
+    res.status(401).json(authorizationError());
     return
   }
   if (userId) {
     userService.delete(userId);
   }
-  res.status(200).send();
+  res.status(200).json();
 })
 
 const port = process.env.PORT || 3000;
@@ -101,21 +123,10 @@ app.listen(port, (error) => {
 })
 
 app.get('/api/rooms', (req, res) => {
-  const userId = req.cookies[COOKIE_USER_ID];
+  const userId = req.header(USER_ID);
   if (!userId) {
-    res.status(401).send(authorizationError());
+    res.status(401).json(authorizationError());
     return
   }
-  return [
-    {
-      id: '1',
-      name: 'Room 1',
-      creationTime: '2024-08-07T09:50:41.000'
-    },
-    {
-      id: '2',
-      name: 'Room 2',
-      creationTime: '2024-08-07T09:50:42.000'
-    }
-  ]
+  res.json(ROOM_LIST.map(convertRoomToDTO));
 })
