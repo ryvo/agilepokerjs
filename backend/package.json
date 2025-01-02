@@ -16,6 +16,7 @@
     "cookie-parser": "^1.4.6",
     "crypto-js": "^4.2.0",
     "express": "^4.19.2",
+    "express-http-context": "^1.2.4",
     "express-validator": "^7.1.0",
     "i18next": "^23.12.2",
     "i18next-browser-languagedetector": "^8.0.0",

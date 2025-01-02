@@ -1,3 +1,4 @@
+import './App.css';
 import Dashboard from './components/Dashboard';
 import Registration from './components/Registration';
 import store from './store';
@@ -11,6 +12,7 @@ import React from 'react';
 import ProtectedRoute from './components/ProtectedRoute';
 import { Navigate } from 'react-router';
 import { ThemeProvider } from 'react-bootstrap';
+import AlertContainerComponent from './components/AlertContainerComponent';
 
 function App() {
   return (
@@ -36,6 +38,7 @@ function App() {
           </Provider>
         </Row>
       </Container>
+      <AlertContainerComponent></AlertContainerComponent>
     </ThemeProvider>
   );
 }

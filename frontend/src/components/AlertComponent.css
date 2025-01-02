@@ -1,0 +1,20 @@
+.alert {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  padding: .5em;
+}
+
+.alert i.bi {
+  margin-right: 1em;
+}
+
+.alert span {
+  flex: 1;
+  text-align: left;
+}
+
+.alert button {
+  margin-left: 1em;
+}

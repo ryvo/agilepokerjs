@@ -1,10 +1,11 @@
 import express from 'express';
+import httpContext from 'express-http-context';
 import { body, validationResult } from 'express-validator';
 import cookieParser from "cookie-parser";
 import { validationError, authorizationError } from './errors.js';
 import userService from './UserService.js';
+import roomService from './RoomService.js';
 
-const app = express();
 const USER_ID = 'User-Id';
 const ROOM_LIST = [
   {
@@ -44,23 +45,41 @@ const createUserIdCookieOptions = () => {
   }
 }
 
-app.use(cookieParser());
+const checkAuth = (res) => {
+  const user = httpContext.get('user');
+  if (!user) {
+    res.status(401).json(authorizationError());
+    return false;
+  }
+  return true;
+}
+
+const app = express();
+//app.use(cookieParser());
 app.use(express.json());
+app.use(httpContext.middleware);
+app.use((req, res, next) => {
+  const userId = req.header(USER_ID);
+  if (userId) {
+    const user = userService.get(userId);
+    if (user) {
+      httpContext.set('user', user)
+    }
+  }
+  next();
+});
 
 /**
  * Returns data of user identified by cookie 'userId'. Or '401 Unauthorized' if valid userId is not supplied.
  */
 app.get("/api/users/current-user", (req, res, next) => {
-  const userId = req.header(USER_ID);
-  if (userId) {
-    const user = userService.get(userId);
-    if (user) {
-      res.json(convertUserToDTO(user));
-      return;
-    }
+  const user = httpContext.get('user');
+  if (!user) {
+    res.status(401).json(authorizationError());
+    return;
   }
-  res.status(401).json(authorizationError());
-})
+  res.json(convertUserToDTO(user));
+});
 
 /**
  * Creates a new user, sets cookie 'userId' and returns data of the user.
@@ -103,15 +122,30 @@ app.post("/api/users",
  * Deletes the user and returns status OK with empty response body.
  */
 app.delete('/api/users', (req, res) => {
-  const userId = req.header(USER_ID);
-  if (!userId) {
+  const user = httpContext.get('user');
+  if (!user) {
     res.status(401).json(authorizationError());
-    return
+    return;
   }
-  if (userId) {
-    userService.delete(userId);
-  }
+  userService.delete(user.id);
   res.status(200).json();
+})
+
+app.get('/api/rooms', (req, res) => {
+  const user = httpContext.get('user');
+  if (!user) {
+    res.status(401).json(authorizationError());
+    return;
+  }
+  res.json(Array.from(roomService.getAll()).map(([key, value]) => convertRoomToDTO(value)));
+})
+
+app.post('/api/rooms', (req, res) => {
+  if(!checkAuth(res)) {
+    return;
+  }
+  const room = roomService.create(req.body.name);
+  res.json(convertRoomToDTO(room));
 })
 
 const port = process.env.PORT || 3000;
@@ -120,13 +154,4 @@ app.listen(port, (error) => {
     console.log(error);
   }
   console.log(`Server started and listening on port ${port}.`);
-})
-
-app.get('/api/rooms', (req, res) => {
-  const userId = req.header(USER_ID);
-  if (!userId) {
-    res.status(401).json(authorizationError());
-    return
-  }
-  res.json(ROOM_LIST.map(convertRoomToDTO));
 })
