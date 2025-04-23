@@ -5,7 +5,7 @@ import roomReducer from './slices/roomSlice';
 
 const rootReducer = combineReducers({
   user: userReducer,
-  room: roomReducer,
+  rooms: roomReducer,
 });
 
 const store = configureStore({

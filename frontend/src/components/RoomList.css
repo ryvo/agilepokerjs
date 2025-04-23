@@ -7,6 +7,18 @@
   width: 100%;
 }
 
+.column-name {
+  text-align: left;
+}
+
+.column-actions {
+  text-align: right;
+}
+
+.column-last-used-time {
+  text-align: left;
+}
+
 .column-actions > * {
   margin-left: 11px;
 }

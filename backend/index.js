@@ -131,6 +131,7 @@ app.delete('/api/users', (req, res) => {
   res.status(200).json();
 })
 
+// Get rooms
 app.get('/api/rooms', (req, res) => {
   const user = httpContext.get('user');
   if (!user) {
@@ -140,12 +141,31 @@ app.get('/api/rooms', (req, res) => {
   res.json(Array.from(roomService.getAll()).map(([key, value]) => convertRoomToDTO(value)));
 })
 
+// Create room
 app.post('/api/rooms', (req, res) => {
   if(!checkAuth(res)) {
     return;
   }
   const room = roomService.create(req.body.name);
   res.json(convertRoomToDTO(room));
+})
+
+// Update room
+app.put('/api/rooms/:id', (req, res) => {
+  if(!checkAuth(res)) {
+    return;
+  }
+  roomService.update(req.body);
+  res.sendStatus(200);
+})
+
+// Delete room
+app.delete('/api/rooms/:id', (req, res) => {
+  if(!checkAuth(res)) {
+    return;
+  }
+  const room = roomService.delete(req.params.id);
+  res.sendStatus(200);
 })
 
 const port = process.env.PORT || 3000;

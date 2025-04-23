@@ -13,6 +13,9 @@ import ProtectedRoute from './components/ProtectedRoute';
 import { Navigate } from 'react-router';
 import { ThemeProvider } from 'react-bootstrap';
 import AlertContainerComponent from './components/AlertContainerComponent';
+import ConfirmationPopup from './components/ConfirmationPopup';
+import RoomPopup from './components/RoomPopup';
+import Room from './components/Room';
 
 function App() {
   return (
@@ -20,9 +23,13 @@ function App() {
       breakpoints={['xl','lg','md','sm']}
       minBreakpoint="sm"
     >
+      <>
+        <ConfirmationPopup />
+        <RoomPopup />
+      </>
       <Container className="w-80 text-center">
         <Row id="header" className="w-50 justify-content-center w-100 p-4">
-          {/*<Image src="images/AgilePokerJS.svg" />*/}
+          {/*<Image src="images/logo.svg" />*/}
         </Row>
         <Row id="content">
           <Provider store={store}>
@@ -32,6 +39,7 @@ function App() {
                 <Route exact path='/' element={<Content />}>
                   <Route index element={<Navigate to='dashboard' replace />} />
                   <Route path='dashboard' element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+                  <Route path='room/:id' element={<Room />} />
                 </Route>
               </Routes>
             </Router>

@@ -53,6 +53,10 @@ class RoomService {
     return newRoom;
   }
 
+  update(room) {
+    this.getRoomsOfCurrentUser().set(room.id, room);
+  }
+
   delete(id) {
     this.getRoomsOfCurrentUser().delete(id);
   }
