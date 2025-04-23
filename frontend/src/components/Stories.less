@@ -1,0 +1,26 @@
+.tabs-bar {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  border-bottom: 1px solid gainsboro;
+
+  .tab {
+    padding: .5em 1em;
+    display: list-item;
+    list-style-type: none;
+    list-style-image: none;
+    list-style-position: outside;
+  }
+
+  .active-tab {
+    border: 1px solid gainsboro;
+    border-radius: .5em .5em 0 0;
+    border-bottom-width: 0;
+    box-shadow: .25em -.2em .2em whitesmoke;
+
+
+    button {
+      margin-bottom: -2px;
+    }
+  }
+}

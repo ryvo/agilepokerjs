@@ -19,11 +19,12 @@
     "react-router-dom": "^6.25.1",
     "react-scripts": "5.0.1",
     "redux": "^5.0.1",
+    "sass": "^1.87.0",
     "web-vitals": "^2.1.4"
   },
   "proxy": "http://localhost:3000",
   "scripts": {
-    "start": "set PORT=3002 && react-scripts start",
+    "start": "concurrently --kill-others \"less-watch-compiler --config less-watcher.config.json\" \"set PORT=3002 && react-scripts start\"",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
@@ -59,7 +60,7 @@
     "eslint-plugin-react": "^7.37.4",
     "eslint-plugin-react-hooks": "^5.2.0",
     "globals": "^16.0.0",
-    "less": "^4.2.0",
+    "less": "^4.3.0",
     "less-watch-compiler": "^1.16.3",
     "prettier": "^3.5.3"
   }
